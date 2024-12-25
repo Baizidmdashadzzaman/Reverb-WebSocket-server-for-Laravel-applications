@@ -77,7 +77,7 @@
 
     <script>
         function sendMessage() {
-            var sernder = "{{$username}}";
+            var sender = "{{$username}}";
             var message = $('#messageinput').val();
             var csrfToken = "{{ csrf_token() }}";
             //alert(sernder);
@@ -88,11 +88,12 @@
                     'X-CSRF-TOKEN': csrfToken
                 },
                 data: {
-                    sender: sernder,
+                    sender: sender,
                     message: message,
                     _token: csrfToken
                 },
                 success: function (response) {
+                    $('#messageinput').val("");
                     $('#messages').append('<div class="message sent" style="text-align: right;">' + response.message + '</div>');
                 },
                 error: function (xhr, status, error) {
@@ -103,8 +104,11 @@
         window.onload = () => {
             Echo.channel('chat-room')
             .listen('ChatSent', (e) => {
-                alert('hi');
-                $('#messages').append('<div class="message received" style="text-align: left;">' + e.message + '</div>');
+                //alert(e.sender);
+                if(e.sender != "{{$username}}") {
+                    $('#messages').append('<div class="message received" style="text-align: left;">' + e.message + '</div>');
+                }
+
             });
         }
 

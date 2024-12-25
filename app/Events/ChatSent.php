@@ -19,7 +19,7 @@ class ChatSent implements ShouldBroadcast
      */
     public function __construct(
         public string $message,
-        public string $username
+        public string $sender
     )
     {
         //
